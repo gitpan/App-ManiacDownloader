@@ -3,7 +3,7 @@ use warnings;
 
 # this test was generated with Dist::Zilla::Plugin::Test::Compile 2.034
 
-use Test::More  tests => 4 + ($ENV{AUTHOR_TESTING} ? 1 : 0);
+use Test::More  tests => 3 + ($ENV{AUTHOR_TESTING} ? 1 : 0);
 
 
 
@@ -13,8 +13,7 @@ my @module_files = (
 );
 
 my @scripts = (
-    'bin/mdown',
-    'bin/mdown~'
+    'bin/mdown'
 );
 
 # fake home for cpan-testers

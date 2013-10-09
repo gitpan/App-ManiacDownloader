@@ -17,7 +17,7 @@ my %module_build_args = (
     "Shlomi Fish <shlomif\@cpan.org>"
   ],
   "dist_name" => "App-ManiacDownloader",
-  "dist_version" => "0.0.1",
+  "dist_version" => "0.0.2",
   "license" => "mit",
   "module_name" => "App::ManiacDownloader",
   "recommends" => {},
@@ -35,9 +35,7 @@ my %module_build_args = (
     "warnings" => 0
   },
   "script_files" => [
-    "bin/mdown~",
     "bin/mdown",
-    "bin/mdown~",
     "bin/mdown"
   ],
   "test_requires" => {
