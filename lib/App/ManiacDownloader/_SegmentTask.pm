@@ -9,6 +9,30 @@ use List::Util qw/min/;
 
 has ['_start', '_end'] => (is => 'rw', isa => 'Int',);
 has '_fh' => (is => 'rw',);
+has 'is_active' => (is => 'rw', isa => 'Bool', default => 1);
+
+sub _serialize
+{
+    my ($self) = @_;
+
+    return
+    +{
+        _start => $self->_start,
+        _end => $self->_end,
+        is_active => $self->is_active,
+    };
+}
+
+sub _deserialize
+{
+    my ($self, $record) = @_;
+
+    $self->_start($record->{_start});
+    $self->_end($record->{_end});
+    $self->is_active($record->{is_active});
+
+    return;
+}
 
 sub _write_data
 {
@@ -35,6 +59,7 @@ sub _close
     my ($self) = @_;
     close($self->_fh);
     $self->_fh(undef());
+    $self->is_active(0);
 
     return;
 }
@@ -66,7 +91,7 @@ __END__
 
 =head1 VERSION
 
-version 0.0.2
+version 0.0.3
 
 =head1 AUTHOR
 

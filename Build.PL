@@ -17,7 +17,7 @@ my %module_build_args = (
     "Shlomi Fish <shlomif\@cpan.org>"
   ],
   "dist_name" => "App-ManiacDownloader",
-  "dist_version" => "0.0.2",
+  "dist_version" => "0.0.3",
   "license" => "mit",
   "module_name" => "App::ManiacDownloader",
   "recommends" => {},
@@ -27,10 +27,12 @@ my %module_build_args = (
     "Fcntl" => 0,
     "File::Basename" => 0,
     "Getopt::Long" => 0,
+    "JSON" => 0,
     "List::Util" => 0,
     "List::UtilsBy" => 0,
     "MooX" => 0,
     "URI" => 0,
+    "autodie" => 0,
     "strict" => 0,
     "warnings" => 0
   },
