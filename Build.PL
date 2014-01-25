@@ -18,7 +18,7 @@ my %module_build_args = (
     "Shlomi Fish <shlomif\@cpan.org>"
   ],
   "dist_name" => "App-ManiacDownloader",
-  "dist_version" => "0.0.6",
+  "dist_version" => "0.0.7",
   "license" => "mit",
   "module_name" => "App::ManiacDownloader",
   "recommends" => {},
@@ -35,6 +35,7 @@ my %module_build_args = (
     "MooX::late" => "0.007",
     "URI" => 0,
     "autodie" => 0,
+    "perl" => "5.012",
     "strict" => 0,
     "warnings" => 0
   },

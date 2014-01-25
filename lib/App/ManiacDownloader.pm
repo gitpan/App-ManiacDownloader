@@ -3,6 +3,8 @@ package App::ManiacDownloader;
 use strict;
 use warnings;
 
+use 5.012;
+
 use autodie;
 
 use MooX qw/late/;
@@ -16,7 +18,7 @@ use JSON qw(decode_json encode_json);
 
 use App::ManiacDownloader::_SegmentTask;
 
-our $VERSION = '0.0.6';
+our $VERSION = '0.0.7';
 
 my $DEFAULT_NUM_CONNECTIONS = 4;
 my $NUM_CONN_BYTES_THRESHOLD = 4_096 * 2;
@@ -349,7 +351,7 @@ App::ManiacDownloader - a maniac download accelerator.
 
 =head1 VERSION
 
-version 0.0.6
+version 0.0.7
 
 =head1 SYNOPSIS
 
