@@ -18,7 +18,7 @@ use JSON qw(decode_json encode_json);
 
 use App::ManiacDownloader::_SegmentTask;
 
-our $VERSION = '0.0.7';
+our $VERSION = '0.0.8';
 
 my $DEFAULT_NUM_CONNECTIONS = 4;
 my $NUM_CONN_BYTES_THRESHOLD = 4_096 * 2;
@@ -345,13 +345,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::ManiacDownloader - a maniac download accelerator.
 
 =head1 VERSION
 
-version 0.0.7
+version 0.0.8
 
 =head1 SYNOPSIS
 
@@ -373,8 +375,6 @@ The main improvement of Maniac Downloader over other downloader managers is
 that if a segment of the downloaded file finishes, then it splits the
 largest remaining segment, and starts another new download, so the slowest
 downloads won't delay the completion time by much.
-
-=encoding utf8
 
 =head1 METHODS
 
