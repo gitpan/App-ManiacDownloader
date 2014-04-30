@@ -1,4 +1,4 @@
-package App::ManiacDownloader::_SegmentTask;
+package App::ManiacDownloader::_BytesDownloaded;
 
 use strict;
 use warnings;
@@ -7,101 +7,67 @@ use MooX qw/late/;
 
 use List::Util qw/min/;
 
-has ['_start', '_end'] => (is => 'rw', isa => 'Int',);
-has '_fh' => (is => 'rw',);
-has 'is_active' => (is => 'rw', isa => 'Bool', default => 1);
-has '_downloaded' => (is => 'rw', isa => 'App::ManiacDownloader::_BytesDownloaded', default => sub { return App::ManiacDownloader::_BytesDownloaded->new; }, handles => ['_flush_and_report'],);
+has ['_bytes_dled', '_bytes_dled_last_timer'] =>
+    (isa => 'Int', is => 'rw', default => sub { return 0;});
 
-has '_guard' => (is => 'rw');
+has '_stale_checkpoints_count' => (isa => 'Int', is => 'rw',
+    default => sub { return 0;});
 
-has '_count_checks_without_download' => (is => 'rw', isa => 'Int', default => 0);
-
-sub _serialize
+sub _add
 {
-    my ($self) = @_;
+    my ($self, $num_written) = @_;
 
-    return
-    +{
-        _start => $self->_start,
-        _end => $self->_end,
-        is_active => $self->is_active,
-    };
-}
-
-sub _deserialize
-{
-    my ($self, $record) = @_;
-
-    $self->_start($record->{_start});
-    $self->_end($record->{_end});
-    $self->is_active($record->{is_active});
+    $self->_bytes_dled(
+        $self->_bytes_dled + $num_written,
+    );
 
     return;
 }
 
-sub _write_data
-{
-    my ($self, $data_ref) = @_;
-
-    my $written = syswrite($self->_fh, $$data_ref);
-    if ($written != length($$data_ref))
-    {
-        die "Written bytes mismatch.";
-    }
-
-    $self->_downloaded->_add($written);
-
-    my $init_start = $self->_start;
-    $self->_start($init_start + $written);
-
-    $self->_count_checks_without_download(0);
-
-    return
-    {
-        should_continue => scalar($self->_start < $self->_end),
-        num_written => (min($self->_start, $self->_end) - $init_start),
-    };
-}
-
-sub _close
+sub _total_downloaded
 {
     my ($self) = @_;
-    close($self->_fh);
-    $self->_fh(undef());
-    $self->is_active(0);
-    $self->_guard('');
 
-    return;
+    return $self->_bytes_dled;
 }
 
-sub _num_remaining
+sub _were_stale_checkpoints_exceeded
+{
+    my ($self, $MAX_COUNT) = @_;
+
+    return ($self->_stale_checkpoints_count >= $MAX_COUNT);
+}
+
+sub _flush_and_report
 {
     my $self = shift;
 
-    return $self->_end - $self->_start;
+    my $difference = $self->_bytes_dled - $self->_bytes_dled_last_timer;
+
+    if ($difference > 0)
+    {
+        $self->_stale_checkpoints_count(0);
+    }
+    else
+    {
+        $self->_stale_checkpoints_count($self->_stale_checkpoints_count + 1);
+    }
+
+    $self->_bytes_dled_last_timer($self->_bytes_dled);
+
+    return ($difference, $self->_bytes_dled);
 }
 
-sub _split_into
+sub _my_init
 {
-    my ($self,$other) = @_;
+    my ($self, $num_bytes) = @_;
 
-    $other->_start(( $self->_start+$self->_end ) >> 1);
-    $other->_end($self->_end);
-    $self->_end($other->_start);
+    $self->_bytes_dled($num_bytes);
+    $self->_bytes_dled_last_timer($num_bytes);
 
     return;
 }
 
-sub _increment_check_count
-{
-    my ($self, $max_checks) = @_;
-
-    $self->_count_checks_without_download(
-        $self->_count_checks_without_download() + 1
-    );
-
-    return ($self->_count_checks_without_download >= $max_checks);
-}
 
 1;
 
