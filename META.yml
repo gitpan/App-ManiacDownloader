@@ -36,4 +36,4 @@ requires:
 resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=App-ManiacDownloader
   repository: ssh://hg@bitbucket.org/shlomif/perl-App-ManiacDownloader
-version: 0.0.9
+version: 0.0.10
